@@ -1,6 +1,7 @@
 #include <iostream>
 #include <typeinfo>
 
+
 namespace RTTI {
 class A {
  public:
@@ -23,21 +24,25 @@ class C {
   virtual void foo() {}
 };
 
-void foo(A& a) {
+
+void foo(A &a) {
   try {
-    B& beta = dynamic_cast<B&>(a);
-  } catch (std::bad_cast) {
+    B &beta = dynamic_cast<B&>(a);
+  }
+  catch(std::bad_cast) {
     std::cout << "bad cast";
   }
 }
 
-}  // namespace RTTI
+}  // namespace diamond_problem
+
+
 
 int main() {
   using namespace RTTI;
   {
-    A* a = new B;
-    if (B* b = dynamic_cast<B*>(a)) {
+    A *a = new B;
+    if (B *b = dynamic_cast<B *>(a)) {
       // успешно…
       std::cout << "b is a child of A";
     } else {
@@ -46,8 +51,8 @@ int main() {
   }
   std::cout << std::endl;
   {
-    C* c = new C;
-    if (B* b = dynamic_cast<B*>(c)) {
+    C *c = new C;
+    if (B *b = dynamic_cast<B *>(c)) {
       // успешно…
       std::cout << "b is a child of C";
     } else {
@@ -61,46 +66,44 @@ int main() {
   }
   std::cout << std::endl;
   {
-    A* a = new A;
-    A* b = new B;
-    if (typeid(a) == typeid(A*)) {
+    A *a = new A;
+    A *b = new B;
+    if(typeid(a) == typeid(A*)) {
       std::cout << "a is A*" << std::endl;
     }
 
-    if (typeid(*a) == typeid(A)) {
+    if(typeid(*a) == typeid(A)) {
       std::cout << "*a is A" << std::endl;
     }
 
-    if (typeid(b) == typeid(B*)) {
+    if(typeid(b) == typeid(B*)) {
       std::cout << "b is B*" << std::endl;
     }
 
-    if (typeid(b) == typeid(A*)) {
+    if(typeid(b) == typeid(A*)) {
       std::cout << "b is A*" << std::endl;
     }
 
-    if (typeid(*b) == typeid(A)) {
+
+    if(typeid(*b) == typeid(A)) {
       std::cout << "*b is B" << std::endl;
     }
 
-    if (typeid(*b) == typeid(B)) {
+    if(typeid(*b) == typeid(B)) {
       std::cout << "*b is B" << std::endl;
     }
   }
 
   {
-    struct Base {};  // non-polymorphic
+    struct Base {}; // non-polymorphic
     struct Derived : Base {};
 
-    struct Base2 {
-      virtual void foo() {}
-    };  // polymorphic
+    struct Base2 { virtual void foo() {} }; // polymorphic
     struct Derived2 : Base2 {};
 
     Derived d1;
     Base& b1 = d1;
-    std::cout << "reference to non-polymorphic base: " << typeid(b1).name()
-              << '\n';
+    std::cout << "reference to non-polymorphic base: " << typeid(b1).name() << '\n';
 
     Derived2 d2;
     Base2& b2 = d2;

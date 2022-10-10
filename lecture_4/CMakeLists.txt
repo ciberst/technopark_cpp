@@ -1,8 +1,0 @@
-set(CMAKE_CXX_STANDARD 20)
-
-add_executable(025_contr_order 025_contr_order.cpp)
-add_executable(026_dimond_inheritance 026_diamond_inheritance.cpp)
-add_executable(026_1_pure_virt_func_call.cpp 026_1_pure_virt_func_call)
-add_executable(027_RTTI 027_RTTI.cpp)
-add_executable(028_elimination 028_elimination.cpp)
-add_executable(100_overload_and_override 100_overload_and_override.cpp)

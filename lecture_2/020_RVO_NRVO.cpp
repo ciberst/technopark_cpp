@@ -1,8 +1,6 @@
 // Run with and without -fno-elide-constructors
 #include <iostream>
 
-using namespace std;
-
 struct A {
     A() {
         std::cout << "A()" << std::endl;

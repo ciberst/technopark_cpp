@@ -1,110 +1,47 @@
 #include <iostream>
 
-namespace diamond_problem {
-
-struct N0 {
-  N0() {
-    std::cout << "ctor N0" << std::endl;
-  }
-};
-
-
-class A /*: public N0*/ {
- public:
-  A() { std::cout << "ctor A()" << std::endl; }
-  explicit A(int a) { std::cout << "ctor A() " << " a = " << a << std::endl; }
-
-  virtual void foo() { std::cout << "foo1" << std::endl << std::endl; }
-
-  int a = 0;
-  int b = 0;
-};
-
-struct Bfirst {
-  Bfirst() {
-    std::cout << "ctor Bfirst()" << std::endl;
-  }
-};
-
-class B :  public Bfirst, public virtual A {
- public:
-  B() { std::cout << "ctor B()" << std::endl; }
-  explicit B(int a) : A(a) { std::cout << "ctor B() " << " a = " << a << std::endl; }
-};
-
-class C :  public virtual A {
- public:
-  C() { std::cout << "ctor C()" << std::endl; }
-};
-
-/*
-class AA {
- public:
-  AA() { std::cout << "ctor AA()" << std::endl; }
-  explicit AA(int a) { std::cout << "ctor AA() " << " a = " << a << std::endl; }
-  int a = 0;
-  int b = 0;
-};
-
-class BB :  public virtual AA {
- public:
-  BB() { std::cout << "ctor BB()" << std::endl; }
-  explicit BB(int a) : AA(a) { std::cout << "ctor BB() " << " a = " << a << std::endl; }
-};
-
-class CC :  public virtual AA {
- public:
-  CC() { std::cout << "ctor CC()" << std::endl; }
-};
-*/
-
 class NonVirtual {
  public:
-  NonVirtual() { std::cout << "ctor Nonvirtual()" << std::endl; }
+  NonVirtual() { std::cout << "ctor NonVirtual::NonVirtual()" << std::endl; }
+  ~NonVirtual() { std::cout << "dtor NonVirtual::~NonVirtual()" << std::endl; }
 };
 
-class D : public NonVirtual, public B, public C/*, public BB, public CC*/ {
+class Object {
  public:
-  D() : /*A(5),*/ B(5) { std::cout << "ctor D()" << std::endl; }
-};
-} // namespace diamond_problem
+  Object() { std::cout << "ctor Object::Object()" << std::endl; }
+  virtual ~Object() { std::cout << "dtor Object::~Object()" << std::endl; }
 
-namespace another_inh_problem {
-class B {
- public:
-  B() { std::cout << "ctor B()" << std::endl; }
-  virtual void foo() { std::cout << "foo2" << std::endl << std::endl; }
+  virtual void foo() const { std::cout << "Object::foo()" << std::endl; }
 };
 
-class C {
+class Clickable : public virtual Object {
  public:
-  C() { std::cout << "ctor C()" << std::endl; }
-  virtual void foo() { std::cout << "foo3" << std::endl << std::endl; }
+  Clickable() { std::cout << "ctor Clickable::Clickable()" << std::endl; }
+  ~Clickable() override {
+    std::cout << "dtor Clickable::~Clickable()" << std::endl;
+  }
+  void foo() const override { std::cout << "Clickable::foo()" << std::endl; }
 };
 
-class D : public B, public C {
+class Rectangle : public virtual Object {
  public:
-  using C::foo;
-  D() { std::cout << "ctor D()" << std::endl; }
+  Rectangle() { std::cout << "ctor Rectangle::Rectangle()" << std::endl; }
+  ~Rectangle() override {
+    std::cout << "dtor Rectangle::~Rectangle()" << std::endl;
+  }
+  void foo() const override { std::cout << "Rectangle::foo()" << std::endl; }
 };
-} // namespace another_inh_problem
+
+class Button : public NonVirtual, public Rectangle, public Clickable {
+ public:
+  Button() { std::cout << "ctor Button::Button()" << std::endl; }
+  ~Button() override { std::cout << "dtor Button::~Button()" << std::endl; };
+  void foo() const override { std::cout << "Button::foo()" << std::endl; }
+};
 
 int main() {
-  {
-    using namespace diamond_problem;
-    D d1;
-    d1.foo();
-
-//    std::cout << sizeof(diamond_problem::A) << std::endl;
-//    std::cout << sizeof(diamond_problem::B) << std::endl;
-//    std::cout << sizeof(diamond_problem::C) << std::endl;
-//    std::cout << sizeof(diamond_problem::D) << std::endl;
-//    std::cout << std::endl;
-  }
-//  std::cout << std::endl;
-//  {
-//    another_inh_problem::D d;
-//    d.foo();
-//  }
+  Object* object = new Button();
+  object->foo();
+  delete object;
   return 0;
 }
