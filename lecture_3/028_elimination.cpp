@@ -1,32 +1,38 @@
 #include <iostream>
 
-struct A {};  // sizeof(A) == 1
+struct Alpha {};
 
-struct B : public A {  // sizeof(B) == 4
-  int a;
+struct Beta : public Alpha {
+  int n;
 };
 
-struct C : public A {  // sizeof(C) == 8;
-  A a;
-  int var;
+struct Gamma : public Alpha {
+  Alpha a;  // атрибут размера 1
+  int n;
 };
 
-struct D : public A {  // sizeof(D) == ?
-  B b;
-  int a;
+struct Delta : public Alpha {
+  Beta b;  // атрибут размера sizeof(int)
+  int n;
 };
 
-struct E {  // sizeof(C) == 4;
-  int var;
-  [[no_unique_address]] A a;  // since C++20
+struct A {
+  Alpha b;
+  int n;
 };
+
+struct B {
+  [[no_unique_address]] Alpha b;
+  int n;
+};
+
+#define PRINT_SIZE(X) std::cout << "sizeof(" #X ") = " << sizeof(X) << std::endl
 
 int main() {
-  std::cout << sizeof(A) << std::endl;
-  std::cout << sizeof(B) << std::endl;
-  std::cout << sizeof(C) << std::endl;
-  std::cout << sizeof(D) << std::endl;
-  std::cout << sizeof(E) << std::endl;
-
-  return 0;
+  PRINT_SIZE(Alpha);
+  PRINT_SIZE(Beta);
+  PRINT_SIZE(Gamma);
+  PRINT_SIZE(Delta);
+  PRINT_SIZE(A);
+  PRINT_SIZE(B);
 }

@@ -1,5 +1,7 @@
 set(CMAKE_CXX_STANDARD 20)
 
+add_executable(005_polymorph 005_polymorph.cpp)
+
 add_executable(025_contr_order 025_contr_order.cpp)
 add_executable(026_dimond_inheritance 026_diamond_inheritance.cpp)
 add_executable(026_1_pure_virt_func_call.cpp 026_1_pure_virt_func_call)

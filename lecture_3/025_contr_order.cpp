@@ -39,8 +39,6 @@ class D {
 };
 }  // namespace
 
-void foo(A a) {}
-
 int main() {
   Alpha* a = new C();
   delete a;
